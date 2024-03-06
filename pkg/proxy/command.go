@@ -56,6 +56,16 @@ func ExtractCommandAction(ctx context.Context, command string, params RequestPar
 		return func(v *vehicle.Vehicle) error { return v.ClimateOn(ctx) }, nil
 	case "auto_conditioning_stop":
 		return func(v *vehicle.Vehicle) error { return v.ClimateOff(ctx) }, nil
+	case "window_control":
+		cmd, err := params.getString("command", true)
+		if err != nil {
+			return nil, err
+		}
+		if cmd == "vent" {
+			return func(v *vehicle.Vehicle) error { return v.VentWindows(ctx) }, nil
+		} else {
+			return func(v *vehicle.Vehicle) error { return v.CloseWindows(ctx) }, nil
+		}
 	case "charge_max_range":
 		return func(v *vehicle.Vehicle) error { return v.ChargeMaxRange(ctx) }, nil
 	case "remote_seat_cooler_request":
